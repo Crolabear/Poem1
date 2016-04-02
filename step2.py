@@ -104,6 +104,36 @@ for item in sorted_Value[0:topChoice]:
 
 
 
+# titleAND author
+author = []
+for it1 in overall:
+  for it2 in it1:
+    search1 = bool(re.search('[0-9]+?_[0-9]=?',it2))
+    if search1:
+      author.append(it2)
+
+
+# '\u300d' is the utf8 code for 」, it is at the end of every title. so i can use this to locate author
+
+authorName = map(lambda x:x.replace(' ','').split(u'\u300d')[-1],author)
+authorCount = {}
+for item in authorName:
+  if item in authorCount.keys():
+    authorCount[item] = authorCount[item] + 1
+  else:
+    authorCount[item] = 1
+
+sorted_author = sorted(authorCount.items(), key=operator.itemgetter(1))
+sorted_author.reverse()
+topChoice = 10
+for item in sorted_author[0:topChoice]:
+    print item[0], item[1]
+
+
+
+
+
+
 pickle.dump(wordDictionary,open( "Words.p", "wb" ) )
 
 
