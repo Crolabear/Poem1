@@ -40,7 +40,7 @@ import time
 
 i=0
 overallStr = []
-for item in link2[300:400]:
+for item in link2[400:902]:
   print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
   print i
   i=i+1
@@ -61,11 +61,54 @@ for item in link2[300:400]:
 
 # back up the string we saved
 import pickle
-pickle.dump(overallStr,open( "save.p", "wb" ) )
+pickle.dump(overallStr,open( "save2.p", "wb" ) )
     
     
 
-# 
+
+import re
+# to input:
+over1 = pickle.load( open( "save.p", "rb" ) )
+over2 = pickle.load(open( "save2.p", "rb" ))
+overall = over1 + over2
+
+sentences = []
+for it1 in overall:
+  for it2 in it1:
+    search1 = bool(re.search('[0-9]+?_[0-9]=?',it2))
+    if not search1:
+      sentences.append(it2)
+
+# break down into words
+wordDictionary = {}
+i=0
+for item in sentences:
+  i = i + 1
+  temp = item.replace(u'\u3002','').replace(u'\uff0c','')
+  for word in temp:
+    if word in wordDictionary.keys():
+      wordDictionary[word] = wordDictionary[word] + 1
+    else:
+      wordDictionary[word] = 1
+
+
+# sort the values
+import operator
+sorted_Value = sorted(wordDictionary.items(), key=operator.itemgetter(1))
+sorted_Value.reverse()
+
+# print the top words
+topChoice = 100
+for item in sorted_Value[0:topChoice]:
+  print item[0]
+
+
+
+pickle.dump(wordDictionary,open( "Words.p", "wb" ) )
+
+
+
+#
 # 
 # 
 # from HTMLParser import HTMLParser
