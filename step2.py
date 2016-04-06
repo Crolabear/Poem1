@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import os
 import time
-
+import pickle
 
 
 def downloadLink(menuLink):
@@ -132,10 +132,11 @@ for item in sorted_author[0:topChoice]:
 
 
 
-
-
 pickle.dump(wordDictionary,open( "Words.p", "wb" ) )
 
+
+
+# obtain ending word
 
 
 #
