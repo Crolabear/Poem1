@@ -6,6 +6,8 @@ import re
 
 over1 = pickle.load( open( "save.p", "rb" ) )
 over2 = pickle.load(open( "save2.p", "rb" ))
+endWordz = pickle.load(open( "endWord.p", "rb" ) )
+
 overall = over1 + over2
 
 individual = pickle.load(open( "Words.p", "rb" ))
@@ -62,7 +64,9 @@ def findTermLocation(term,poemList):
 for item in terms:
   k = findTermLocation(item,sentSegment)
   termPosition[k[0]] = k[1]  
-  
+
+pickle.dump(termPosition,open( "termPosition", "wb" ) )
+
   
 # what do i do after i obtain the position of each word?
 # it will be nice if i can have a map that tells me how words are related
@@ -118,4 +122,65 @@ def genRymPoem(lines,wordPerLine,biList,triList):
   return newPoem  
   
   
-example = genRymPoem(4,5,bi,tri)  
+example = genRymPoem(4,5,bi,tri)
+
+
+
+def obtainNextLine(endWord,charNum,endWordDictionary,list1):
+  indez = []
+  temp = []
+  
+  # this is to filter out all sentences of not matching length
+  for item in list1:
+    if len(item) == charNum:
+      temp.append(item)
+
+# now i want to use the endword provided to come up with a different end word that associates with it.
+  try:
+    possibleMatch = random.choice(endWordDictionary[endWord])
+  except KeyError:
+    possibleMatch = u'\u5b8c'
+  
+  i = 0    
+  for item2 in temp:
+    if possibleMatch == item2[-1]:
+      indez.append(i)
+    i=i+1
+  
+  if indez: 
+    int1 = random.choice(indez)
+    sent = temp[int1]
+    print 1
+  else:
+    int2 = random.choice(range(len(temp)))
+    sent = temp[int2]
+    print 2
+  return sent  
+
+
+def getitRhyme(numberLine,leng,endWordDic,biList,triList):
+  storing = []
+  line1 = random.sample(triList,1)[0]
+  storing.append(line1)
+  count = numberLine - 1
+  for item in range(count):
+    line1 = obtainNextLine(line1[-1],3,endWordDic,triList)
+    storing.append(line1)
+  newPoem = []
+  if leng == 5:
+    for item in storing:
+      newPoem.append(random.choice(biList)+item)
+  if leng == 7:
+    for item in storing:
+      twoItem = random.sample(biList,2)
+      newPoem.append(twoItem[0]+twoItem[1]+item)
+
+  return newPoem
+  
+ 
+  
+
+
+  
+
+

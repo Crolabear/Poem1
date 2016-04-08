@@ -169,7 +169,9 @@ for item in set(wordlist):
     if item == i2[0]:
       temp.append(i2[1])
   newDic[item] = temp
-  
+pickle.dump(newDic,open( "endWord.p", "wb" ) )
+
+
 # next we want to know how the program goes.
 # i want to begin with a random line
 # then base on the final word, come up with the next line
